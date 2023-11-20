@@ -7,14 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "cineclub-administration-service",path = "/api/TuCine/v1/cineclub_administration")
 public interface MovieClient {
-    @RequestMapping("/films/verify/{filmName}")
-    boolean checkIfMovieExist( @PathVariable("filmName") Long  filmName) throws RuntimeException;
+    @RequestMapping("/films/verify/{filmId}")
+    boolean checkIfMovieExist( @PathVariable("filmId") Long  filmId) throws RuntimeException;
 
     @GetMapping("/films/getById/{id}")
-    public ResponseEntity<FilmResponse> getMovieById(@PathVariable("id") Long filmId);
+    public ResponseEntity<FilmResponse> getMovieById(@PathVariable("id") Long id);
 
 }

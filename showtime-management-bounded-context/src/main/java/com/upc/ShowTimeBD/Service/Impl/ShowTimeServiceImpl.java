@@ -6,18 +6,14 @@ import com.upc.ShowTimeBD.Models.ShowTimeModel;
 import com.upc.ShowTimeBD.Repositories.ShowTimeRepository;
 import com.upc.ShowTimeBD.Service.ShowTimeService;
 import com.upc.ShowTimeBD.Shared.CinemaResponse;
-import com.upc.ShowTimeBD.Shared.FilmResponse;
 import feign.FeignException;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,9 +33,9 @@ public class ShowTimeServiceImpl implements ShowTimeService {
     @Transactional
     public ShowTimeModel save(ShowTimeModel showTimeModel) throws Exception {
         ValidateIfCinemaExists(showTimeModel.getCinemaId().toString());
+        validateIfMovieExists(showTimeModel.getMovieId().toString());
         ValidateCinemaStatus(showTimeModel.getCinemaId().toString());
-        Capacity(showTimeModel.getCinemaId().toString());
-        //ValidateIfMovieExist(showTimeModel.getMovieId().toString());
+        Capacity(showTimeModel.getCinemaId().toString(),showTimeModel.getCapacity());
         return showTimeRepository.save(showTimeModel);
     }
     @Override
@@ -69,7 +65,6 @@ public class ShowTimeServiceImpl implements ShowTimeService {
             throw new ValidationException(feignException.getMessage());
         }
     }
-
     private void ValidateIfCinemaExists(String id) throws Exception {
         try{
             //ResponseEntity<CinemaResponse> CineClubResponse = cinemaClient.getCinemaByName(Long.valueOf(id));
@@ -82,22 +77,21 @@ public class ShowTimeServiceImpl implements ShowTimeService {
             throw new ValidationException(feignException.getMessage());
         }
     }
+
     private void ValidateCinemaStatus(String id) throws Exception{
         try{
-            ResponseEntity<CinemaResponse> CineClubResponse = cinemaClient.getCinemaByName(Long.valueOf(id));
-            if(CineClubResponse.getBody().getStatus().equals("CLOSED")){
+            ResponseEntity<CinemaResponse> CineClubResponse = cinemaClient.getCineclubById(Long.valueOf(id));
+            if(CineClubResponse.getBody().getState().equals("CLOSED")){
                 throw new ValidationException("Cinema is closed. Please, wait for tomorrow to create a new showtime");
             }
         } catch (FeignException feignException) {
             throw new ValidationException(feignException.getMessage());
         }
     }
-    private void Capacity(String id){
+    private void Capacity(String id, int showtimeCapacity){
         try{
-            ShowTimeModel showtime = new ShowTimeModel();
-            int showtimeCapacity = showtime.getCapacity();
-            ResponseEntity<CinemaResponse> CineClubResponse = cinemaClient.getCinemaByName(Long.valueOf(id));
-            if(CineClubResponse.getBody().getCapacity() < showtimeCapacity){
+            ResponseEntity<CinemaResponse> CineClubResponse = cinemaClient.getCineclubById(Long.valueOf(id));
+            if(!(CineClubResponse.getBody().getCapacity() >= showtimeCapacity)){
                 throw new ValidationException("Introduce a valid capacity");
             }
         } catch (FeignException feignException) {
