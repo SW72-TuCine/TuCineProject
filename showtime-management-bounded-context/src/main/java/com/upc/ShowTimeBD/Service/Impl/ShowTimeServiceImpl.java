@@ -6,6 +6,7 @@ import com.upc.ShowTimeBD.Models.ShowTimeModel;
 import com.upc.ShowTimeBD.Repositories.ShowTimeRepository;
 import com.upc.ShowTimeBD.Service.ShowTimeService;
 import com.upc.ShowTimeBD.Shared.CinemaResponse;
+import com.upc.ShowTimeBD.Shared.FilmResponse;
 import feign.FeignException;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -57,8 +58,11 @@ public class ShowTimeServiceImpl implements ShowTimeService {
 
     private void validateIfMovieExists(String id) throws ValidationException {
         try{
-            boolean FilmResponse = movieClient.checkIfMovieExist(Long.valueOf(id));
-            if(!FilmResponse){
+            //boolean FilmResponse = movieClient.checkIfMovieExist(Long.valueOf(id));
+            
+            ResponseEntity<FilmResponse> FilmResponse = movieClient.getMovieById(Long.valueOf(id));
+
+            if(FilmResponse.getBody().getId() == null){
                 throw new ValidationException("Film does not exist");
             }
         } catch (FeignException feignException) {

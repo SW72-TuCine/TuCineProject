@@ -9,6 +9,4 @@ public class FilmResponse {
     String year;
     String synopsis;
     int duration;
-
-
 }
