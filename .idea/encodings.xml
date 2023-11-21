@@ -8,6 +8,7 @@
     <file url="file://$PROJECT_DIR$/businessdomain/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/businessdomain/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cineclub-administration-bounded-context/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/comments-bounded-context/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/config-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/discovery/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infraestructuredomain/api-gateway/src/main/java" charset="UTF-8" />
