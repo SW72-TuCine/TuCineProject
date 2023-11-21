@@ -24,6 +24,7 @@
         <module>cineclub-administration-bounded-context</module>
         <module>showtime-management-bounded-context</module>
         <module>reservation-purchase-bounded-context</module>
+        <module>comments-bounded-context</module>
     </modules>
 
     <properties>
