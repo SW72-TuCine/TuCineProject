@@ -59,7 +59,7 @@ public class ShowTimeServiceImpl implements ShowTimeService {
     private void validateIfMovieExists(String id) throws ValidationException {
         try{
             //boolean FilmResponse = movieClient.checkIfMovieExist(Long.valueOf(id));
-            
+
             ResponseEntity<FilmResponse> FilmResponse = movieClient.getMovieById(Long.valueOf(id));
 
             if(FilmResponse.getBody().getId() == null){

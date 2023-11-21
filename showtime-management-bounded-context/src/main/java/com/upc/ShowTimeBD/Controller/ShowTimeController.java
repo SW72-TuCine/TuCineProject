@@ -24,10 +24,7 @@ public class ShowTimeController {
     public ResponseEntity<List<ShowTimeModel>> findAllShowTime(){
         try {
             List<ShowTimeModel> showTime = showTimeService.getAll();
-            if(showTime.size() >0)
-                return new ResponseEntity<>(showTime, HttpStatus.OK);
-            else
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(showTime, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
