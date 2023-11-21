@@ -4,6 +4,7 @@ import com.tucine.comments.Clients.MovieClient;
 import com.tucine.comments.Clients.UserClient;
 import com.tucine.comments.Models.MovieComments;
 import com.tucine.comments.Services.MovieCommentsService;
+import com.tucine.comments.shared.response.MovieResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,18 +49,17 @@ public class MovieCommentsController {
         Long movieId = movieComment.getMovieId();
         // Comprueba si el usuario existe llamando al servicio de usuarios
         boolean userExists = userClient.checkIfUserExists(userId);
-        boolean movieExists = movieClient.checkIfMovieExists(movieId);
+        ResponseEntity<MovieResponse> movieResponse = movieClient.getFilmById(movieId);
 
         if(!userExists){
             return new ResponseEntity<>("Usuario no existe", HttpStatus.BAD_REQUEST);
-
-        } else if (!movieExists){
-            return new ResponseEntity<>("Película no existe", HttpStatus.BAD_REQUEST);
-        } else {
-            MovieComments createdComment = movieCommentsService.createMovieComment(movieComment);
-            return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
-
         }
+        if(movieResponse.getBody().getId() ==null){
+            return new ResponseEntity<>("Película no existe", HttpStatus.BAD_REQUEST);
+        }
+
+        MovieComments createdComment = movieCommentsService.createMovieComment(movieComment);
+        return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

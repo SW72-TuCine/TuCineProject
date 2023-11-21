@@ -25,6 +25,7 @@ services:
     ports:
       - 33063:3306
 
+
   reservationpurchase-db:
     image: mysql:latest
     environment:
@@ -32,6 +33,13 @@ services:
       MYSQL_DATABASE: reservationpurchase
     ports:
       - 33064:3306
+
+  comments-db:
+    image: mongo:latest
+    environment:
+        MONGO_INITDB_DATABASE: comments
+    ports:
+      - 27018:27017
 
   discovery:
     image: discovery-service:latest
@@ -99,3 +107,14 @@ services:
       - config
     ports:
       - 8084:8084
+
+  comments-service:
+    restart: on-failure
+    image: comments-service:latest
+    environment:
+      - EUREKA_SERVER=http://discovery:8761/eureka
+    depends_on:
+      - discovery
+      - config
+    ports:
+      - 8085:8085

@@ -12,7 +12,5 @@ public interface CineclubCommentsService {
     CineclubComments createCineclubComment(CineclubComments cineclubComment);
 
     CineclubComments updateCineclubComment(String id, CineclubComments cineclubComment);
-
     void deleteCineclubComment(String id);
-
 }
